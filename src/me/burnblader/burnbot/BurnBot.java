@@ -49,7 +49,7 @@ public class BurnBot {
 		new Thread() {
 			public void run() {
 				
-				connection.write("PASS oauth:nua1a01tfhmpifo3qfgcnqdlnxefbvk\r\n");
+				connection.write("PASS oath:1234\r\n");
 				Log.info("Sent pass.");
 				connection.write("NICK " + username + "\r\n");
 				Log.info("Sent nickname.");
