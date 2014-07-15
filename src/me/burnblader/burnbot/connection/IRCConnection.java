@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import me.burnblader.burnbot.connection.messages.Message;
 import me.burnblader.burnbot.log.Log;
+import me.burnblader.burnbot.main.Main;
 
 public class IRCConnection {
 	
@@ -18,6 +19,8 @@ public class IRCConnection {
 	private Socket socket;
 	private BufferedWriter output;
 	private BufferedReader input;
+	
+	private ListenForInput inputThread;
 	
 	public IRCConnection(String ip, int port) {
 		this.ip = ip;
@@ -33,6 +36,9 @@ public class IRCConnection {
 			Log.info("Connection", "Output connected.");
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			Log.info("Connection", "Input connected.");
+			inputThread = new ListenForInput(input);
+			inputThread.start();
+			Log.info("Connection", "Started the input thread.");
 			Log.info("Connection", "Complete.");
 		} catch (IOException e) {
 			Log.error(e);
@@ -58,6 +64,20 @@ public class IRCConnection {
 	public void write(String s) {
 		try {
 			output.write(s);
+			Log.info("oBurnBoto: " + s.replace("\n", "").replace("\r", ""));
+		} catch (IOException e) {
+			Log.error(e);
+		}
+	}
+	
+	public void sendMessage(String message) {
+		write("PRIVMSG #" + Main.getBot().getChannel() + " :" + message + "\r\n");
+		flush();
+	}
+	
+	public void flush() {
+		try {
+			output.flush();
 		} catch (IOException e) {
 			Log.error(e);
 		}
@@ -67,7 +87,7 @@ public class IRCConnection {
 		
 		private BufferedReader reader;
 		
-		private boolean running;
+		private boolean running = true;
 		
 		public ListenForInput(BufferedReader reader) {
 			this.reader = reader;
@@ -78,11 +98,12 @@ public class IRCConnection {
 			while(running) {
 				try {
 					String s = reader.readLine();
-					if(s != "") {
+					if(s != "" && s != null) {
+						Log.info(s);
 						Message m = new Message(s);
 						m.parse();
 					}
-				} catch (IOException e) { }
+				} catch (IOException e) { Log.error(e); }
 			}
 		}
 		
