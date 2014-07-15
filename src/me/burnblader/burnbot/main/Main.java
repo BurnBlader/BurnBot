@@ -7,7 +7,7 @@ public class Main {
 	private static BurnBot burnBot;
 	
 	public static void main(String[] args) {
-		burnBot = new BurnBot("oBurnBoto", "irc.freenode.net", 6667, "haskell");
+		burnBot = new BurnBot("oBurnBoto", "irc.twitch.tv", 6667, "burnblader");
 		burnBot.start();
 	}
 	

@@ -21,10 +21,6 @@ public class Message {
 		} else if(message.startsWith("PING ")) {
 			Main.getBot().getConnection().write("PONG :" + message.substring(5) + "\r\n");
 			Main.getBot().getConnection().flush();
-		} else if(message.contains("!echo ")) {
-			String s = message.substring(message.lastIndexOf(":") + 1).replace("!echo ", "");
-			Main.getBot().getConnection().write("PRIVMSG #" + Main.getBot().getChannel() + " :" + s + "\r\n");
-			Main.getBot().getConnection().flush();
 		} else if(message.contains("PRIVMSG ")) {
 			String s = message.substring(message.lastIndexOf(":") + 1);
 			Command.parse(s);

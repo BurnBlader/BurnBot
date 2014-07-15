@@ -49,11 +49,14 @@ public class BurnBot {
 		new Thread() {
 			public void run() {
 				
-				connection.write("USER " + username + " . . :github.com/BurnBlader/BurnBot\r\n");
-				Log.info("Sent user.");
+				connection.write("PASS oauth:nua1a01tfhmpifo3qfgcnqdlnxefbvk\r\n");
+				Log.info("Sent pass.");
 				connection.write("NICK " + username + "\r\n");
 				Log.info("Sent nickname.");
 				connection.flush();
+				//connection.write("USER " + username + " 0 * :BurnBot\r\n");
+				//Log.info("Sent user.");
+				//connection.flush();
 				Log.info("Flushed.");
 				
 				try {
